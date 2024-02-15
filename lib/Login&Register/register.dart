@@ -22,7 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
       String phone, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080//miniProject_tourlism/register.php'),
+        Uri.parse(
+            'http://192.168.1.23:8080//miniProject_tourlism/register.php'),
         body: {
           'firstname': firstname,
           'lastname': lastname,
@@ -88,24 +89,25 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
               Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    // SizedBox(height: 10.0),
                     Text(
                       'สร้างบัญชีผู้ใช้',
                       style: TextStyle(
@@ -169,7 +171,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         prefixIcon: Icon(Icons.email),
                       ),
                     ),
-
                     SizedBox(height: 20.0),
                     TextFormField(
                       controller: _phoneController,
@@ -192,7 +193,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         prefixIcon: Icon(Icons.phone),
                       ),
                     ),
-
                     SizedBox(height: 20.0),
                     TextFormField(
                       controller: _passwordController,
@@ -211,7 +211,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       obscureText: true,
                     ),
-
                     SizedBox(height: 20.0),
                     TextFormField(
                       controller: _confirmPasswordController,

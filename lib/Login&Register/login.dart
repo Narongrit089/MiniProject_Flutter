@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mn_641463014/Login&Register/register.dart';
+import 'package:mn_641463014/Content/homePage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,7 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> loginUser(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080//miniProject_tourlism/checklogin.php'),
+        Uri.parse(
+            'http://192.168.1.23:8080/miniProject_tourlism/checklogin.php'),
         body: {
           'email': email,
           'password': password,
@@ -30,6 +32,10 @@ class _LoginPageState extends State<LoginPage> {
         // เพิ่มโค้ดที่ต้องการทำหลังจากเข้าสู่ระบบสำเร็จ เช่น เปลี่ยนหน้า
         // Navigator.pushReplacementNamed(context, '/home');
         print("เข้าสู่ระบบสำเร็จ");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
       } else {
         // เข้าสู่ระบบไม่สำเร็จ
         print("เข้าสู่ระบบไม่สำเร็จ");
@@ -80,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: 20.0),
+                SizedBox(height: 100.0),
                 Center(
                   child: Text(
                     'ยินดีต้อนรับ',
@@ -101,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(fontSize: 18.0),
                           ),
                           SizedBox(
-                              height: 15), // ระยะห่างระหว่างรูปภาพและข้อความ
+                              height: 30), // ระยะห่างระหว่างรูปภาพและข้อความ
                           Image.asset(
                             'images/laptop.png',
                             width: 100,
@@ -112,9 +118,10 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30.0),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   validator: (input) {
                     if (input?.isEmpty ?? true) {
                       return 'โปรดกรอกอีเมล';
