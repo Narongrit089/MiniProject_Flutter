@@ -22,8 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
       String phone, String password) async {
     try {
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.1.23:8080//miniProject_tourlism/register.php'),
+        Uri.parse('http://localhost:8080//miniProject_tourlism/register.php'),
         body: {
           'firstname': firstname,
           'lastname': lastname,

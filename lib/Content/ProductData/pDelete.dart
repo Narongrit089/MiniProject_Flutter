@@ -2,41 +2,35 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:mn_641463014/Content/LocationData/lList.dart';
+import 'package:mn_641463014/Content/ProductData/pList.dart';
 
-class DeleteLocationPage extends StatefulWidget {
+class DeleteProductPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  DeleteLocationPage({required this.data});
+  DeleteProductPage({required this.data});
 
   @override
-  _DeleteLocationPageState createState() => _DeleteLocationPageState();
+  _DeleteProductPageState createState() => _DeleteProductPageState();
 }
 
-class _DeleteLocationPageState extends State<DeleteLocationPage> {
-  late TextEditingController locationCodeController;
-  late TextEditingController locationNameController;
-  late TextEditingController latitudeController;
-  late TextEditingController longitudeController;
+class _DeleteProductPageState extends State<DeleteProductPage> {
+  late TextEditingController productIdController;
+  late TextEditingController productNameController;
 
   @override
   void initState() {
     super.initState();
-    locationCodeController =
-        TextEditingController(text: widget.data['codeLo'].toString());
-    locationNameController =
-        TextEditingController(text: widget.data['nameLo'].toString());
-    latitudeController =
-        TextEditingController(text: widget.data['latitude'].toString());
-    longitudeController =
-        TextEditingController(text: widget.data['longitude'].toString());
+    productIdController =
+        TextEditingController(text: widget.data['codeProduct'].toString());
+    productNameController =
+        TextEditingController(text: widget.data['nameProduct'].toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ลบข้อมูลสถานที่'),
+        title: Text('ลบข้อมูลสินค้า'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,15 +47,13 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Icon(
-                    Icons.location_on,
+                    Icons.shopping_cart,
                     size: 50,
-                    color: Colors.blue,
+                    color: Colors.red,
                   ),
                 ),
-                buildReadOnlyField('รหัสสถานที่', locationCodeController),
-                buildReadOnlyField('ชื่อสถานที่', locationNameController),
-                buildReadOnlyField('ละติจูด', latitudeController),
-                buildReadOnlyField('ลองติจูด', longitudeController),
+                buildReadOnlyField('รหัสสินค้า', productIdController),
+                buildReadOnlyField('ชื่อสินค้า', productNameController),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
@@ -101,7 +93,7 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('ยืนยันการลบ'),
-          content: Text('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลสถานที่นี้'),
+          content: Text('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลสินค้านี้'),
           actions: [
             TextButton(
               onPressed: () {
@@ -112,7 +104,7 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await deleteLocation();
+                await deleteProduct();
               },
               child: Text('ลบ'),
             ),
@@ -122,27 +114,26 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
     );
   }
 
-  Future<void> deleteLocation() async {
-    String locationCode = locationCodeController.text;
+  Future<void> deleteProduct() async {
+    String productId = productIdController.text;
 
     // Replace this URL with your actual API endpoint
     String apiUrl =
-        'http://localhost:8080//miniProject_tourlism/CRUD/crud_location.php?case=DELETE';
+        'http://localhost:8080//miniProject_tourlism/CRUD/crud_product.php?case=DELETE';
 
     try {
       var response = await http.delete(
         Uri.parse(apiUrl),
         body: json.encode({
-          'codeLo': locationCode,
+          'codeProduct': productId,
         }),
         headers: {'Content-Type': 'application/json'},
       );
 
       if (response.statusCode == 200) {
-        showSuccessDialog(context, "ลบข้อมูลสถานที่เรียบร้อยแล้ว");
+        showSuccessDialog(context, "ลบข้อมูลสินค้าเรียบร้อยแล้ว");
       } else {
-        showSuccessDialog(
-            context, "ลบข้อมูลสถานที่ไม่สำเร็จ. ${response.body}");
+        showSuccessDialog(context, "ลบข้อมูลสินค้าไม่สำเร็จ. ${response.body}");
       }
     } catch (error) {
       showSuccessDialog(context, 'Error: $error');
@@ -163,11 +154,11 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LocationListPage(),
+                    builder: (context) => ProductListPage(),
                   ),
                 );
               },
-              child: Text('กลับไปที่รายการสถานที่'),
+              child: Text('กลับไปที่รายการสินค้า'),
             ),
           ],
         );
@@ -177,10 +168,8 @@ class _DeleteLocationPageState extends State<DeleteLocationPage> {
 
   @override
   void dispose() {
-    locationCodeController.dispose();
-    locationNameController.dispose();
-    latitudeController.dispose();
-    longitudeController.dispose();
+    productIdController.dispose();
+    productNameController.dispose();
     super.dispose();
   }
 }

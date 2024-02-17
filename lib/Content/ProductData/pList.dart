@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:mn_641463014/footer.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/homePage.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/footer.dart';
+import 'package:mn_641463014/Content/homePage.dart';
 
-import 'package:mn_641463014/Content/LocationData/lDetail.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lEdit.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lInsert.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lDelete.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/Content/ProductData/pDetail.dart';
+import 'package:mn_641463014/Content/ProductData/pEdit.dart';
+import 'package:mn_641463014/Content/ProductData/pInsert.dart';
+import 'package:mn_641463014/Content/ProductData/pDelete.dart';
 
-class LocationListPage extends StatefulWidget {
+class ProductListPage extends StatefulWidget {
   @override
-  _LocationListPageState createState() => _LocationListPageState();
+  _ProductListPageState createState() => _ProductListPageState();
 }
 
-class _LocationListPageState extends State<LocationListPage> {
+class _ProductListPageState extends State<ProductListPage> {
   bool isHovered = false;
-  late Future<List<Map<String, dynamic>>> _locationData;
+  late Future<List<Map<String, dynamic>>> _productData;
 
-  Future<List<Map<String, dynamic>>> _fetchLocationData() async {
+  Future<List<Map<String, dynamic>>> _fetchProductData() async {
     final response = await http.get(Uri.parse(
-        'http://localhost:8080//miniProject_tourlism/CRUD/crud_location.php?case=GET'));
+        'http://localhost:8080//miniProject_tourlism/CRUD/crud_product.php?case=GET'));
 
     if (response.statusCode == 200) {
       final dynamic parsed = json.decode(response.body);
@@ -30,29 +30,29 @@ class _LocationListPageState extends State<LocationListPage> {
         if (parsed.containsKey("data") && parsed["data"] is List<dynamic>) {
           return parsed["data"].cast<Map<String, dynamic>>();
         } else {
-          throw Exception('รูปแบบข้อมูลสถานที่ไม่ถูกต้อง');
+          throw Exception('รูปแบบข้อมูลสินค้าไม่ถูกต้อง');
         }
       } else if (parsed is List<dynamic>) {
         return parsed.cast<Map<String, dynamic>>();
       } else {
-        throw Exception('รูปแบบข้อมูลสถานที่ไม่ถูกต้อง');
+        throw Exception('รูปแบบข้อมูลสินค้าไม่ถูกต้อง');
       }
     } else {
-      throw Exception('การดึงข้อมูลสถานที่ล้มเหลว');
+      throw Exception('การดึงข้อมูลสินค้าล้มเหลว');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _locationData = _fetchLocationData();
+    _productData = _fetchProductData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ข้อมูลสถานที่'),
+        title: Text('ข้อมูลสินค้า'),
       ),
       body: Column(
         children: [
@@ -74,14 +74,14 @@ class _LocationListPageState extends State<LocationListPage> {
                   ],
                 ),
                 child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: _locationData,
+                  future: _productData,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('ข้อผิดพลาด: ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('ไม่มีข้อมูลสถานที่');
+                      return Text('ไม่มีข้อมูลสินค้า');
                     } else {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -97,8 +97,8 @@ class _LocationListPageState extends State<LocationListPage> {
                             return Colors.blue.withOpacity(0.1);
                           }),
                           columns: <DataColumn>[
-                            DataColumn(label: Text('รหัสสถานที่')),
-                            DataColumn(label: Text('ชื่อสถานที่')),
+                            DataColumn(label: Text('รหัสสินค้า')),
+                            DataColumn(label: Text('ชื่อสินค้า')),
                             DataColumn(label: Text('เพิ่มเติม')),
                             DataColumn(label: Text('แก้ไข')),
                             DataColumn(label: Text('ลบ')),
@@ -108,15 +108,15 @@ class _LocationListPageState extends State<LocationListPage> {
                               cells: <DataCell>[
                                 DataCell(
                                   Text(
-                                    data['codeLo']?.toString() ?? '',
+                                    data['codeProduct']?.toString() ?? '',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                DataCell(
-                                    Text(data['nameLo']?.toString() ?? '')),
+                                DataCell(Text(
+                                    data['nameProduct']?.toString() ?? '')),
                                 DataCell(
                                   GestureDetector(
                                     onTap: () {
@@ -124,7 +124,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              LocationDetailPage(data: data),
+                                              ProductDetailPage(data: data),
                                         ),
                                       );
                                     },
@@ -142,7 +142,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              EditLocationPage(data: data),
+                                              EditProductPage(data: data),
                                         ),
                                       );
                                     },
@@ -160,7 +160,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              DeleteLocationPage(data: data),
+                                              DeleteProductPage(data: data),
                                         ),
                                       );
                                     },
@@ -183,10 +183,8 @@ class _LocationListPageState extends State<LocationListPage> {
             ),
           ),
           CustomFooter(
-            selectedIndex: 0, // กำหนดให้เลือก index 0 เป็นค่าเริ่มต้น
-            onTap: (index) {
-              // ไม่มีการนำ index ไปใช้ใน LocationListPage ดังนั้นจะไม่มีการปรับเปลี่ยนการทำงาน
-            },
+            selectedIndex: 0,
+            onTap: (index) {},
           ),
         ],
       ),
@@ -199,12 +197,10 @@ class _LocationListPageState extends State<LocationListPage> {
             onExit: (_) => setState(() => isHovered = false),
             child: FloatingActionButton(
               onPressed: () {
-                // Add your logic to navigate to the page for adding data
-                // For example:
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => InsertLocationPage(),
+                    builder: (context) => InsertProductPage(),
                   ),
                 );
               },
@@ -212,23 +208,18 @@ class _LocationListPageState extends State<LocationListPage> {
                   ? Text(
                       'เพิ่ม',
                       style: TextStyle(
-                        // สามารถปรับแต่งสไตล์ของ Text ในส่วนนี้ตามที่ต้องการ
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     )
                   : Icon(Icons.add),
               hoverColor: Colors.blue,
-              foregroundColor: Colors
-                  .white, // เพิ่ม foregroundColor เพื่อกำหนดสีของ icon/text
-              backgroundColor: isHovered
-                  ? Colors.blue[800]
-                  : Colors.blue, // ปรับสีพื้นหลังเมื่อ Hover
-              elevation:
-                  isHovered ? 8 : 4, // ปรับความสูงของ shadows เมื่อ Hover
+              foregroundColor: Colors.white,
+              backgroundColor: isHovered ? Colors.blue[800] : Colors.blue,
+              elevation: isHovered ? 8 : 4,
             ),
           ),
-          SizedBox(height: 100), // เพิ่มระยะห่างระหว่างปุ่มและ DataTable
+          SizedBox(height: 100),
         ],
       ),
     );

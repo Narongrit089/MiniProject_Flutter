@@ -2,35 +2,35 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:mn_641463014/Content/TramData/tList.dart';
+import 'package:mn_641463014/Content/StoreData/sList.dart'; // เปลี่ยน import ไปยัง StoreListPage
 
-class EditTramPage extends StatefulWidget {
+class StoreEditPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  EditTramPage({required this.data});
+  StoreEditPage({required this.data});
 
   @override
-  _EditTramPageState createState() => _EditTramPageState();
+  _StoreEditPageState createState() => _StoreEditPageState();
 }
 
-class _EditTramPageState extends State<EditTramPage> {
-  late TextEditingController tramCodeController;
-  late TextEditingController carNumberController;
+class _StoreEditPageState extends State<StoreEditPage> {
+  late TextEditingController storeCodeController;
+  late TextEditingController storeNameController;
 
   @override
   void initState() {
     super.initState();
-    tramCodeController =
-        TextEditingController(text: widget.data['tram_code'].toString());
-    carNumberController =
-        TextEditingController(text: widget.data['car_num'].toString());
+    storeCodeController =
+        TextEditingController(text: widget.data['codeStore'].toString());
+    storeNameController =
+        TextEditingController(text: widget.data['nameStore'].toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แก้ไขข้อมูลรถราง'),
+        title: Text('แก้ไขข้อมูลร้านค้า'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -51,33 +51,33 @@ class _EditTramPageState extends State<EditTramPage> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Icon(
-                      Icons.train,
+                      Icons.store,
                       size: 50,
-                      color: Color(0xFF2baf2b),
-                    ), // แสดงไอคอนของรถราง
+                      color: Colors.purple,
+                    ), // แสดงไอคอนของร้านค้า
                   ),
-                  buildReadOnlyField('รหัสรถราง', tramCodeController),
+                  buildReadOnlyField('รหัสร้านค้า', storeCodeController),
                   TextFormField(
-                    controller: carNumberController,
+                    controller: storeNameController,
                     decoration: InputDecoration(
-                      labelText: 'หมายเลขรถ',
+                      labelText: 'ชื่อร้านค้า',
                     ),
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      String updatedTramCode = tramCodeController.text;
-                      String updatedCarNumber = carNumberController.text;
+                      String updatedStoreCode = storeCodeController.text;
+                      String updatedStoreName = storeNameController.text;
 
                       String apiUrl =
-                          'http://localhost:8080//miniProject_tourlism/CRUD/crud_tram.php?case=PUT';
+                          'http://localhost:8080//miniProject_tourlism/CRUD/crud_store.php?case=PUT';
 
                       try {
                         var response = await http.put(
                           Uri.parse(apiUrl),
                           body: json.encode({
-                            'tram_code': updatedTramCode,
-                            'car_num': updatedCarNumber,
+                            'codeStore': updatedStoreCode,
+                            'nameStore': updatedStoreName,
                           }),
                           headers: {'Content-Type': 'application/json'},
                         );
@@ -85,12 +85,12 @@ class _EditTramPageState extends State<EditTramPage> {
                         if (response.statusCode == 200) {
                           showSuccessDialog(
                             context,
-                            "บันทึกข้อมูลรถรางเรียบร้อยแล้ว.",
+                            "บันทึกข้อมูลร้านค้าเรียบร้อยแล้ว.",
                           );
                         } else {
                           showSuccessDialog(
                             context,
-                            "ไม่สามารถบันทึกข้อมูลรถรางได้. ${response.body}",
+                            "ไม่สามารถบันทึกข้อมูลร้านค้าได้. ${response.body}",
                           );
                         }
                       } catch (error) {
@@ -101,7 +101,7 @@ class _EditTramPageState extends State<EditTramPage> {
                       padding: EdgeInsets.symmetric(
                           vertical: 15.0,
                           horizontal: 20.0), // กำหนดขนาดพื้นที่ของปุ่ม
-                      primary: Colors.green, // สีพื้นหลังของปุ่ม
+                      primary: Colors.purple, // สีพื้นหลังของปุ่ม
                       onPrimary: Colors.white, // สีของตัวอักษรบนปุ่ม
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -139,8 +139,8 @@ class _EditTramPageState extends State<EditTramPage> {
 
   @override
   void dispose() {
-    tramCodeController.dispose();
-    carNumberController.dispose();
+    storeCodeController.dispose();
+    storeNameController.dispose();
     super.dispose();
   }
 
@@ -158,11 +158,12 @@ class _EditTramPageState extends State<EditTramPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TramListPage(),
+                    builder: (context) =>
+                        StoreListPage(), // เปลี่ยนเป็น StoreListPage
                   ),
                 );
               },
-              child: Text('กลับไปที่รายการรถราง'),
+              child: Text('กลับไปที่รายการร้านค้า'),
             ),
           ],
         );

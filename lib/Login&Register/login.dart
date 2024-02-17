@@ -18,8 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> loginUser(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.1.23:8080/miniProject_tourlism/checklogin.php'),
+        Uri.parse('http://localhost:8080//miniProject_tourlism/checklogin.php'),
         body: {
           'email': email,
           'password': password,

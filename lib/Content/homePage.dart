@@ -4,6 +4,8 @@ import 'package:mn_641463014/footer.dart';
 import 'package:mn_641463014/Content/TramData/tList.dart';
 import 'package:mn_641463014/Content/LocationData/lList.dart';
 import 'package:mn_641463014/Content/BusRouteData/brList.dart';
+import 'package:mn_641463014/Content/StoreData/sList.dart';
+import 'package:mn_641463014/Content/ProductData/pList.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -74,6 +76,10 @@ class _HomePageState extends State<HomePage> {
                   () {
                     // ไปที่หน้าข้อมูลร้านค้า
                     navigateToPage('ข้อมูลร้านค้า');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StoreListPage()),
+                    );
                   },
                 ),
                 buildMenuItem(
@@ -83,6 +89,11 @@ class _HomePageState extends State<HomePage> {
                   () {
                     // ไปที่หน้าข้อมูลสินค้า
                     navigateToPage('ข้อมูลสินค้า');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductListPage()),
+                    );
                   },
                 ),
               ],

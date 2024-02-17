@@ -119,7 +119,7 @@ class _DeleteTramPageState extends State<DeleteTramPage> {
 
     // Replace this URL with your actual API endpoint
     String apiUrl =
-        'http://192.168.1.23:8080/miniProject_tourlism/CRUD/crud_tram.php?case=DELETE';
+        'http://localhost:8080//miniProject_tourlism/CRUD/crud_tram.php?case=DELETE';
 
     try {
       var response = await http.delete(

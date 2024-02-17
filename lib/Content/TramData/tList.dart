@@ -21,7 +21,7 @@ class _TramListPageState extends State<TramListPage> {
 
   Future<List<Map<String, dynamic>>> _fetchTramData() async {
     final response = await http.get(Uri.parse(
-        'http://192.168.1.23:8080/miniProject_tourlism/CRUD/crud_tram.php?case=GET'));
+        'http://localhost:8080//miniProject_tourlism/CRUD/crud_tram.php?case=GET'));
 
     if (response.statusCode == 200) {
       final dynamic parsed = json.decode(response.body);

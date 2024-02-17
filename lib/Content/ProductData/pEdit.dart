@@ -3,45 +3,51 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'package:mn_641463014/Content/BusRouteData/brList.dart';
+import 'package:mn_641463014/Content/ProductData/pList.dart';
 
-class EditBusRoutePage extends StatefulWidget {
+class EditProductPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  EditBusRoutePage({required this.data});
+  EditProductPage({required this.data});
 
   @override
-  _EditBusRoutePageState createState() => _EditBusRoutePageState();
+  _EditProductPageState createState() => _EditProductPageState();
 }
 
-class _EditBusRoutePageState extends State<EditBusRoutePage> {
-  late TextEditingController routeNoController;
-  late TextEditingController routeTimeController;
-  String? selectedCodeLo;
-  late List<Map<String, dynamic>> locations;
+class _EditProductPageState extends State<EditProductPage> {
+  late TextEditingController codeProductController;
+  late TextEditingController nameProductController;
+  late TextEditingController countUnitController;
+  late TextEditingController priceController;
+  String? selectedCodeStore;
+  late List<Map<String, dynamic>> stores;
 
   @override
   void initState() {
     super.initState();
-    routeNoController =
-        TextEditingController(text: widget.data['route_no'].toString());
-    routeTimeController =
-        TextEditingController(text: widget.data['route_time'].toString());
-    selectedCodeLo = widget.data['codeLo'].toString();
-    locations = [];
-    fetchLocations();
+    codeProductController =
+        TextEditingController(text: widget.data['codeProduct'].toString());
+    nameProductController =
+        TextEditingController(text: widget.data['nameProduct'].toString());
+    countUnitController =
+        TextEditingController(text: widget.data['count_unit'].toString());
+    priceController =
+        TextEditingController(text: widget.data['price'].toString());
+    selectedCodeStore = widget.data['codeStore'].toString();
+    stores = [];
+    fetchStores();
   }
 
-  Future<void> fetchLocations() async {
+  Future<void> fetchStores() async {
     final response = await http.get(
       Uri.parse(
-          'http://localhost:8080//miniProject_tourlism/CRUD/crud_location.php?case=GET'),
+          'http://localhost:8080//miniProject_tourlism/CRUD/crud_store.php?case=GET'),
     );
     if (response.statusCode == 200) {
       final dynamic parsed = json.decode(response.body);
       if (parsed is Map<String, dynamic> && parsed.containsKey("data")) {
         setState(() {
-          locations = parsed["data"].cast<Map<String, dynamic>>();
+          stores = parsed["data"].cast<Map<String, dynamic>>();
         });
       }
     }
@@ -51,7 +57,7 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แก้ไขข้อมูลเส้นทางรถบัส'),
+        title: Text('แก้ไขข้อมูลสินค้า'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -72,30 +78,38 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Icon(
-                      Icons.directions_bus,
+                      Icons.shopping_cart,
                       size: 50,
-                      color: Colors.orange,
+                      color: Colors.red,
                     ),
                   ),
-                  buildReadOnlyField('รหัสเส้นทาง', routeNoController),
-                  buildLocationDropdown(),
-                  buildTimeFormField(),
+                  buildReadOnlyField('รหัสสินค้า', codeProductController),
+                  buildStoreDropdown(),
+                  buildProductNameFormField(),
+                  buildCountUnitFormField(),
+                  buildPriceFormField(),
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      String updatedRouteNo = routeNoController.text;
-                      String updatedRouteTime = routeTimeController.text;
+                      String updatedCodeProduct = codeProductController.text;
+                      String updatedNameProduct = nameProductController.text;
+                      int updatedCountUnit =
+                          int.parse(countUnitController.text);
+                      int updatedPrice = int.parse(priceController.text);
+                      String updatedCodeStore = selectedCodeStore ?? "S001";
 
                       String apiUrl =
-                          'http://localhost:8080//miniProject_tourlism/CRUD/crud_busroute.php?case=PUT';
+                          'http://localhost:8080//miniProject_tourlism/CRUD/crud_product.php?case=PUT';
 
                       try {
                         var response = await http.put(
                           Uri.parse(apiUrl),
                           body: json.encode({
-                            'route_no': updatedRouteNo,
-                            'codeLo': selectedCodeLo,
-                            'route_time': updatedRouteTime,
+                            'codeProduct': updatedCodeProduct,
+                            'nameProduct': updatedNameProduct,
+                            'count_unit': updatedCountUnit,
+                            'price': updatedPrice,
+                            'codeStore': updatedCodeStore,
                           }),
                           headers: {'Content-Type': 'application/json'},
                         );
@@ -103,12 +117,12 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
                         if (response.statusCode == 200) {
                           showSuccessDialog(
                             context,
-                            "บันทึกข้อมูลเส้นทางรถบัสเรียบร้อยแล้ว.",
+                            "บันทึกข้อมูลสินค้าเรียบร้อยแล้ว.",
                           );
                         } else {
                           showSuccessDialog(
                             context,
-                            "ไม่สามารถบันทึกข้อมูลเส้นทางรถบัสได้. ${response.body}",
+                            "ไม่สามารถบันทึกข้อมูลสินค้าได้. ${response.body}",
                           );
                         }
                       } catch (error) {
@@ -118,7 +132,7 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                           vertical: 15.0, horizontal: 20.0),
-                      primary: Colors.orange,
+                      primary: Colors.red,
                       onPrimary: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -153,48 +167,50 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
     );
   }
 
-  Widget buildLocationDropdown() {
+  Widget buildStoreDropdown() {
     return DropdownButtonFormField<String>(
-      value: selectedCodeLo,
-      decoration: InputDecoration(labelText: 'รหัสสถานที่'),
-      items: locations.map((location) {
+      value: selectedCodeStore,
+      decoration: InputDecoration(labelText: 'รหัสร้านค้า'),
+      items: stores.map((store) {
         return DropdownMenuItem<String>(
-          value: location['codeLo'].toString(),
-          child: Text(location['codeLo'].toString()),
+          value: store['codeStore'].toString(),
+          child: Text(store['codeStore'].toString()),
         );
       }).toList(),
       onChanged: (String? value) {
         setState(() {
-          selectedCodeLo = value;
+          selectedCodeStore = value;
         });
       },
     );
   }
 
-  Widget buildTimeFormField() {
+  Widget buildProductNameFormField() {
     return TextFormField(
-      controller: routeTimeController,
+      controller: nameProductController,
       decoration: InputDecoration(
-        labelText: 'เวลาเดินทาง',
+        labelText: 'ชื่อสินค้า',
       ),
-      keyboardType: TextInputType.datetime,
-      onTap: () async {
-        var time = await showTimePicker(
-          context: context,
-          initialTime: TimeOfDay.now(),
-        );
-        if (time != null) {
-          setState(() {
-            routeTimeController.text = DateFormat.Hm().format(DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-              time.hour,
-              time.minute,
-            ));
-          });
-        }
-      },
+    );
+  }
+
+  Widget buildCountUnitFormField() {
+    return TextFormField(
+      controller: countUnitController,
+      decoration: InputDecoration(
+        labelText: 'จำนวน',
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget buildPriceFormField() {
+    return TextFormField(
+      controller: priceController,
+      decoration: InputDecoration(
+        labelText: 'ราคา',
+      ),
+      keyboardType: TextInputType.number,
     );
   }
 
@@ -212,11 +228,11 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BusRouteListPage(),
+                    builder: (context) => ProductListPage(),
                   ),
                 );
               },
-              child: Text('กลับไปที่รายการเส้นทางรถบัส'),
+              child: Text('กลับไปที่รายการสินค้า'),
             ),
           ],
         );

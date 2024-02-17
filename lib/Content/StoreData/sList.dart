@@ -5,23 +5,23 @@ import 'dart:convert';
 import 'package:mn_641463014/footer.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
 import 'package:mn_641463014/Content/homePage.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
 
-import 'package:mn_641463014/Content/LocationData/lDetail.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lEdit.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lInsert.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
-import 'package:mn_641463014/Content/LocationData/lDelete.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/Content/StoreData/sDetail.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/Content/StoreData/sEdit.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/Content/StoreData/sInsert.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
+import 'package:mn_641463014/Content/StoreData/sDelete.dart'; // นำเข้าไฟล์ Footer.dart ที่มีอยู่แล้ว
 
-class LocationListPage extends StatefulWidget {
+class StoreListPage extends StatefulWidget {
   @override
-  _LocationListPageState createState() => _LocationListPageState();
+  _StoreListPageState createState() => _StoreListPageState();
 }
 
-class _LocationListPageState extends State<LocationListPage> {
+class _StoreListPageState extends State<StoreListPage> {
   bool isHovered = false;
-  late Future<List<Map<String, dynamic>>> _locationData;
+  late Future<List<Map<String, dynamic>>> _storeData;
 
-  Future<List<Map<String, dynamic>>> _fetchLocationData() async {
+  Future<List<Map<String, dynamic>>> _fetchStoreData() async {
     final response = await http.get(Uri.parse(
-        'http://localhost:8080//miniProject_tourlism/CRUD/crud_location.php?case=GET'));
+        'http://localhost:8080//miniProject_tourlism/CRUD/crud_store.php?case=GET'));
 
     if (response.statusCode == 200) {
       final dynamic parsed = json.decode(response.body);
@@ -30,29 +30,29 @@ class _LocationListPageState extends State<LocationListPage> {
         if (parsed.containsKey("data") && parsed["data"] is List<dynamic>) {
           return parsed["data"].cast<Map<String, dynamic>>();
         } else {
-          throw Exception('รูปแบบข้อมูลสถานที่ไม่ถูกต้อง');
+          throw Exception('รูปแบบข้อมูลร้านค้าไม่ถูกต้อง');
         }
       } else if (parsed is List<dynamic>) {
         return parsed.cast<Map<String, dynamic>>();
       } else {
-        throw Exception('รูปแบบข้อมูลสถานที่ไม่ถูกต้อง');
+        throw Exception('รูปแบบข้อมูลร้านค้าไม่ถูกต้อง');
       }
     } else {
-      throw Exception('การดึงข้อมูลสถานที่ล้มเหลว');
+      throw Exception('การดึงข้อมูลร้านค้าล้มเหลว');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _locationData = _fetchLocationData();
+    _storeData = _fetchStoreData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ข้อมูลสถานที่'),
+        title: Text('ข้อมูลร้านค้า'),
       ),
       body: Column(
         children: [
@@ -74,14 +74,14 @@ class _LocationListPageState extends State<LocationListPage> {
                   ],
                 ),
                 child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: _locationData,
+                  future: _storeData,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('ข้อผิดพลาด: ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('ไม่มีข้อมูลสถานที่');
+                      return Text('ไม่มีข้อมูลร้านค้า');
                     } else {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -97,8 +97,8 @@ class _LocationListPageState extends State<LocationListPage> {
                             return Colors.blue.withOpacity(0.1);
                           }),
                           columns: <DataColumn>[
-                            DataColumn(label: Text('รหัสสถานที่')),
-                            DataColumn(label: Text('ชื่อสถานที่')),
+                            DataColumn(label: Text('รหัสร้านค้า')),
+                            DataColumn(label: Text('ชื่อร้านค้า')),
                             DataColumn(label: Text('เพิ่มเติม')),
                             DataColumn(label: Text('แก้ไข')),
                             DataColumn(label: Text('ลบ')),
@@ -108,7 +108,7 @@ class _LocationListPageState extends State<LocationListPage> {
                               cells: <DataCell>[
                                 DataCell(
                                   Text(
-                                    data['codeLo']?.toString() ?? '',
+                                    data['codeStore']?.toString() ?? '',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                   ),
                                 ),
                                 DataCell(
-                                    Text(data['nameLo']?.toString() ?? '')),
+                                    Text(data['nameStore']?.toString() ?? '')),
                                 DataCell(
                                   GestureDetector(
                                     onTap: () {
@@ -124,7 +124,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              LocationDetailPage(data: data),
+                                              StoreDetailPage(data: data),
                                         ),
                                       );
                                     },
@@ -142,7 +142,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              EditLocationPage(data: data),
+                                              StoreEditPage(data: data),
                                         ),
                                       );
                                     },
@@ -160,7 +160,7 @@ class _LocationListPageState extends State<LocationListPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              DeleteLocationPage(data: data),
+                                              DeleteStorePage(data: data),
                                         ),
                                       );
                                     },
@@ -185,7 +185,7 @@ class _LocationListPageState extends State<LocationListPage> {
           CustomFooter(
             selectedIndex: 0, // กำหนดให้เลือก index 0 เป็นค่าเริ่มต้น
             onTap: (index) {
-              // ไม่มีการนำ index ไปใช้ใน LocationListPage ดังนั้นจะไม่มีการปรับเปลี่ยนการทำงาน
+              // ไม่มีการนำ index ไปใช้ใน StoreListPage ดังนั้นจะไม่มีการปรับเปลี่ยนการทำงาน
             },
           ),
         ],
@@ -204,7 +204,7 @@ class _LocationListPageState extends State<LocationListPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => InsertLocationPage(),
+                    builder: (context) => InsertStorePage(),
                   ),
                 );
               },

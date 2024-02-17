@@ -90,7 +90,7 @@ class _EditLocationPageState extends State<EditLocationPage> {
                       String updatedLongitude = longitudeController.text;
 
                       String apiUrl =
-                          'http://192.168.1.23:8080/miniProject_tourlism/CRUD/crud_location.php?case=PUT';
+                          'http://localhost:8080//miniProject_tourlism/CRUD/crud_location.php?case=PUT';
 
                       try {
                         var response = await http.put(
