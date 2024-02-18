@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.5 <4.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,14 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.13.3 #เวอร์ชั่นล่าสุด
-  intl: ^0.17.0 # หรือเวอร์ชันล่าสุด
-
-  google_maps_flutter: ^2.5.0
+  http: ^0.13.3
+  intl: ^0.17.0
+  google_maps_flutter: ^2.2.5
+  flutter_polyline_points: ^1.0.0
   location: ^5.0.3
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  syncfusion_flutter_gauges: ^20.3.30
+  geolocator: ^7.7.0
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
@@ -87,6 +86,9 @@ flutter:
     - images/ss.png
 
     - images/laptop.png
+    - images/3d-house.png
+    - images/3d-map.png
+    - images/logout.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

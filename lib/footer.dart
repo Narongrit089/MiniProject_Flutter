@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mn_641463014/Login&Register/login.dart'; // Import LoginPage for navigation
 
 import 'package:mn_641463014/Content/homePage.dart';
+import 'package:mn_641463014/Content/homePage2.dart';
 
 class CustomFooter extends StatelessWidget {
   final int selectedIndex; // เพิ่มสมาชิก selectedIndex ใน CustomFooter
@@ -33,36 +35,37 @@ class CustomFooter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           FooterItem(
-            icon: Icons.home,
+            imagePath: 'images/3d-house.png', // รูปภาพสำหรับหน้าหลัก
             label: 'หน้าหลัก',
-            isSelected:
-                selectedIndex == 0, // ตรวจสอบว่าเป็นเมนูที่ถูกเลือกหรือไม่
+            isSelected: selectedIndex == 0,
             onTap: () {
-              onTap?.call(0); // เรียกใช้ onTap และส่ง index ของเมนู
+              onTap?.call(0);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        HomePage()), // เมื่อคลิกที่ "หน้าหลัก" ให้ไปยัง HomePage
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             },
           ),
           FooterItem(
-            icon: Icons.location_on,
+            imagePath: 'images/3d-map.png', // รูปภาพสำหรับหน้าสถานที่
             label: 'สถานที่',
-            isSelected:
-                selectedIndex == 1, // ตรวจสอบว่าเป็นเมนูที่ถูกเลือกหรือไม่
+            isSelected: selectedIndex == 1,
             onTap: () {
-              onTap?.call(1); // เรียกใช้ onTap และส่ง index ของเมนู
+              onTap?.call(1);
+              // แทนที่ด้วย Navigator.push ของหน้าที่ต้องการ
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage2()),
+              );
             },
           ),
           FooterItem(
-            icon: Icons.person,
-            label: 'โปรไฟล์',
-            isSelected:
-                selectedIndex == 2, // ตรวจสอบว่าเป็นเมนูที่ถูกเลือกหรือไม่
+            imagePath: 'images/logout.png', // รูปภาพสำหรับออกจากระบบ
+            label: 'ออกจากระบบ',
+            isSelected: selectedIndex == 2,
             onTap: () {
-              onTap?.call(2); // เรียกใช้ onTap และส่ง index ของเมนู
+              onTap?.call(2);
+              showConfirmationDialog(context); // แสดงกล่องยืนยันการออกจากระบบ
             },
           ),
         ],
@@ -71,14 +74,43 @@ class CustomFooter extends StatelessWidget {
   }
 }
 
+void showConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('ออกจากระบบ'),
+        content: Text('คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('ยกเลิก'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            child: Text('ตกลง'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class FooterItem extends StatelessWidget {
-  final IconData icon;
+  final String imagePath;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
   const FooterItem({
-    required this.icon,
+    required this.imagePath,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -93,22 +125,16 @@ class FooterItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected
-                  ? Colors.white
-                  : const Color.fromARGB(
-                      255, 0, 0, 0), // กำหนดสีของไอคอนตามเงื่อนไข
+            Image.asset(
+              imagePath,
+              width: 24,
+              height: 24,
             ),
             SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? Colors.white
-                    : const Color.fromARGB(
-                        255, 0, 0, 0), // กำหนดสีของตัวหนังสือตามเงื่อนไข
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ],

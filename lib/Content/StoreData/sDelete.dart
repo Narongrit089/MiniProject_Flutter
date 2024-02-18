@@ -133,11 +133,11 @@ class _DeleteStorePageState extends State<DeleteStorePage> {
       if (response.statusCode == 200) {
         showSuccessDialog(context, "ลบข้อมูลร้านค้าเรียบร้อยแล้ว");
       } else {
-        showSuccessDialog(
+        showSuccessDialog404(
             context, "ลบข้อมูลร้านค้าไม่สำเร็จ. ${response.body}");
       }
     } catch (error) {
-      showSuccessDialog(context, 'Error: $error');
+      showSuccessDialog404(context, 'Error: $error');
     }
   }
 
@@ -148,6 +148,32 @@ class _DeleteStorePageState extends State<DeleteStorePage> {
         return AlertDialog(
           title: Text('แจ้งเตือน'),
           content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StoreListPage(),
+                  ),
+                );
+              },
+              child: Text('กลับไปที่รายการร้านค้า'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showSuccessDialog404(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('แจ้งเตือน'),
+          content: Text('ไม่สามารถลบได้ ร้านค้านี้ยังมีสินค้าอยู่'),
           actions: [
             TextButton(
               onPressed: () {
