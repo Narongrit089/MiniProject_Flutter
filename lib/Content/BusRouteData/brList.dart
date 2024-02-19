@@ -98,7 +98,7 @@ class _BusRouteListPageState extends State<BusRouteListPage> {
                           }),
                           columns: <DataColumn>[
                             DataColumn(label: Text('ลำดับ')),
-                            DataColumn(label: Text('รหัสสถานที่')),
+                            DataColumn(label: Text('สถานที่')),
                             DataColumn(label: Text('เวลา')),
                             DataColumn(label: Text('เพิ่มเติม')),
                             DataColumn(label: Text('แก้ไข')),
@@ -117,7 +117,7 @@ class _BusRouteListPageState extends State<BusRouteListPage> {
                                   ),
                                 ),
                                 DataCell(
-                                    Text(data['codeLo']?.toString() ?? '')),
+                                    Text(data['nameLo']?.toString() ?? '')),
                                 DataCell(
                                     Text(data['route_time']?.toString() ?? '')),
                                 DataCell(

@@ -24,7 +24,7 @@ class _DeleteBusRoutePageState extends State<DeleteBusRoutePage> {
     routeNoController =
         TextEditingController(text: widget.data['route_no'].toString());
     codeLoController =
-        TextEditingController(text: widget.data['codeLo'].toString());
+        TextEditingController(text: widget.data['nameLo'].toString());
     routeTimeController =
         TextEditingController(text: widget.data['route_time'].toString());
   }
@@ -56,7 +56,7 @@ class _DeleteBusRoutePageState extends State<DeleteBusRoutePage> {
                   ),
                 ),
                 buildReadOnlyField('รหัสเส้นทาง', routeNoController),
-                buildReadOnlyField('รหัสสถานที่', codeLoController),
+                buildReadOnlyField('สถานที่', codeLoController),
                 buildReadOnlyField('เวลาเดินทาง', routeTimeController),
                 SizedBox(height: 20),
                 ElevatedButton(

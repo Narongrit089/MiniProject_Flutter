@@ -158,11 +158,11 @@ class _InsertProductPageState extends State<InsertProductPage> {
   Widget buildStoreDropdown() {
     return DropdownButtonFormField<String>(
       value: selectedCodeStore,
-      decoration: InputDecoration(labelText: 'รหัสร้านค้า'),
+      decoration: InputDecoration(labelText: 'ชื่อร้านค้า'),
       items: stores.map((store) {
         return DropdownMenuItem<String>(
           value: store['codeStore'].toString(),
-          child: Text(store['codeStore'].toString()),
+          child: Text(store['nameStore'].toString()),
         );
       }).toList(),
       onChanged: (String? value) {

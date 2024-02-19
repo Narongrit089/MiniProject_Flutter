@@ -35,7 +35,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                 ),
                 buildDetailField('รหัสสินค้า', data['codeProduct']),
-                buildDetailField('รหัสร้านค้า', data['codeStore']),
+                buildDetailField('ชื่อร้านค้า', data['nameStore']),
                 buildDetailField('ชื่อสินค้า', data['nameProduct']),
                 buildDetailField('จำนวน', data['count_unit']),
                 buildDetailField('ราคา', data['price']),

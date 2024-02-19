@@ -35,7 +35,7 @@ class BusRouteDetailPage extends StatelessWidget {
                   ),
                 ),
                 buildDetailField('ลำดับ', data['route_no']),
-                buildDetailField('รหัสสถานที่', data['codeLo']),
+                buildDetailField('สถานที่', data['nameLo']),
                 buildDetailField('เวลา', data['route_time']),
               ],
             ),

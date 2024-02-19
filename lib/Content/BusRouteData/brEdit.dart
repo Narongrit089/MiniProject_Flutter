@@ -156,11 +156,11 @@ class _EditBusRoutePageState extends State<EditBusRoutePage> {
   Widget buildLocationDropdown() {
     return DropdownButtonFormField<String>(
       value: selectedCodeLo,
-      decoration: InputDecoration(labelText: 'รหัสสถานที่'),
+      decoration: InputDecoration(labelText: 'สถานที่'),
       items: locations.map((location) {
         return DropdownMenuItem<String>(
           value: location['codeLo'].toString(),
-          child: Text(location['codeLo'].toString()),
+          child: Text(location['nameLo'].toString()),
         );
       }).toList(),
       onChanged: (String? value) {
