@@ -1,9 +1,30 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class TramDetailPage extends StatelessWidget {
+import 'package:mn_641463014/Content/TramData/tList.dart';
+
+class TramDetailPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
   TramDetailPage({required this.data});
+
+  @override
+  _TramDetailPageState createState() => _TramDetailPageState();
+}
+
+class _TramDetailPageState extends State<TramDetailPage> {
+  late TextEditingController tramCodeController;
+  late TextEditingController carNumController;
+
+  @override
+  void initState() {
+    super.initState();
+    tramCodeController =
+        TextEditingController(text: widget.data['tram_code'].toString());
+    carNumController =
+        TextEditingController(text: widget.data['car_num'].toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +36,8 @@ class TramDetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Card(
           elevation: 5.0,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -34,8 +52,25 @@ class TramDetailPage extends StatelessWidget {
                     color: Color(0xFF2baf2b),
                   ),
                 ),
-                buildDetailField('รหัสรถราง', data['tram_code']),
-                buildDetailField('หมายเลขรถ', data['car_num']),
+                buildReadOnlyField('รหัสรถราง', tramCodeController),
+                buildReadOnlyField('หมายเลขรถ', carNumController),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TramListPage()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('images/list.png', width: 20, height: 20),
+                      SizedBox(width: 8),
+                      Text('กลับไปยังหน้ารายการรถราง'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -44,13 +79,21 @@ class TramDetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailField(String labelText, dynamic value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        '$labelText: $value',
-        style: TextStyle(fontSize: 16.0),
+  Widget buildReadOnlyField(
+      String labelText, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        labelText: labelText,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    tramCodeController.dispose();
+    carNumController.dispose();
+    super.dispose();
   }
 }

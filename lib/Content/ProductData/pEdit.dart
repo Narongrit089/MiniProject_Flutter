@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 
 import 'package:mn_641463014/Content/ProductData/pList.dart';
 
@@ -93,8 +92,7 @@ class _EditProductPageState extends State<EditProductPage> {
                     onPressed: () async {
                       String updatedCodeProduct = codeProductController.text;
                       String updatedNameProduct = nameProductController.text;
-                      int updatedCountUnit =
-                          int.parse(countUnitController.text);
+                      String updatedCountUnit = countUnitController.text;
                       int updatedPrice = int.parse(priceController.text);
                       String updatedCodeStore = selectedCodeStore ?? "S001";
 
@@ -198,9 +196,9 @@ class _EditProductPageState extends State<EditProductPage> {
     return TextFormField(
       controller: countUnitController,
       decoration: InputDecoration(
-        labelText: 'จำนวน',
+        labelText: 'หน่วยนับ',
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
     );
   }
 

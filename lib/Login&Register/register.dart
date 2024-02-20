@@ -95,6 +95,10 @@ class _RegisterPageState extends State<RegisterPage> {
             Navigator.pop(context);
           },
         ),
+        title: Text(
+          'สร้างบัญชีผู้ใช้',
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -107,15 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'สร้างบัญชีผู้ใช้',
-                      style: TextStyle(
-                          fontSize: 30.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      'สร้างบัญชีใหม่',
-                      style: TextStyle(fontSize: 18.0),
+                    Image.asset(
+                      'images/laptop.png',
+                      width: 100,
+                      height: 100,
                     ),
                     SizedBox(height: 30.0),
                     TextFormField(

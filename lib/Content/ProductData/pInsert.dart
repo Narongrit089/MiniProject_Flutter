@@ -12,7 +12,7 @@ class InsertProductPage extends StatefulWidget {
 class _InsertProductPageState extends State<InsertProductPage> {
   late TextEditingController codeStoreController;
   late TextEditingController productNameController;
-  late TextEditingController countUnitController;
+  late TextEditingController count_unitController;
   late TextEditingController priceController;
 
   late List<Map<String, dynamic>> stores;
@@ -23,7 +23,7 @@ class _InsertProductPageState extends State<InsertProductPage> {
     super.initState();
     codeStoreController = TextEditingController();
     productNameController = TextEditingController();
-    countUnitController = TextEditingController();
+    count_unitController = TextEditingController();
     priceController = TextEditingController();
     selectedCodeStore = null;
     stores = [];
@@ -76,7 +76,7 @@ class _InsertProductPageState extends State<InsertProductPage> {
                 ),
                 buildStoreDropdown(),
                 buildProductNameFormField(),
-                buildCountUnitFormField(),
+                buildcount_unitFormField(),
                 buildPriceFormField(),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -84,7 +84,8 @@ class _InsertProductPageState extends State<InsertProductPage> {
                     if (_validateInputs()) {
                       String codeStore = selectedCodeStore ?? "101";
                       String productName = productNameController.text;
-                      int countUnit = int.parse(countUnitController.text);
+                      String count_unit =
+                          count_unitController.text; // Changed to string
                       int price = int.parse(priceController.text);
 
                       String apiUrl =
@@ -96,7 +97,7 @@ class _InsertProductPageState extends State<InsertProductPage> {
                           body: json.encode({
                             'codeStore': codeStore,
                             'nameProduct': productName,
-                            'count_unit': countUnit,
+                            'count_unit': count_unit,
                             'price': price,
                           }),
                           headers: {'Content-Type': 'application/json'},
@@ -188,16 +189,16 @@ class _InsertProductPageState extends State<InsertProductPage> {
     );
   }
 
-  Widget buildCountUnitFormField() {
+  Widget buildcount_unitFormField() {
     return TextFormField(
-      controller: countUnitController,
+      controller: count_unitController,
       decoration: InputDecoration(
-        labelText: 'จำนวน',
+        labelText: 'หน่วยนับ',
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text, // Changed to accept string
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'โปรดกรอกจำนวนสินค้า';
+          return 'โปรดกรอกหน่วยนับสินค้า';
         }
         return null;
       },
@@ -223,7 +224,7 @@ class _InsertProductPageState extends State<InsertProductPage> {
   bool _validateInputs() {
     if (selectedCodeStore == null ||
         productNameController.text.isEmpty ||
-        countUnitController.text.isEmpty ||
+        count_unitController.text.isEmpty ||
         priceController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -266,7 +267,7 @@ class _InsertProductPageState extends State<InsertProductPage> {
   void dispose() {
     codeStoreController.dispose();
     productNameController.dispose();
-    countUnitController.dispose();
+    count_unitController.dispose();
     priceController.dispose();
     super.dispose();
   }

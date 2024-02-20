@@ -16,6 +16,9 @@ class DeleteProductPage extends StatefulWidget {
 class _DeleteProductPageState extends State<DeleteProductPage> {
   late TextEditingController productIdController;
   late TextEditingController productNameController;
+  late TextEditingController codeStoreController;
+  late TextEditingController unitController;
+  late TextEditingController priceController;
 
   @override
   void initState() {
@@ -24,6 +27,12 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
         TextEditingController(text: widget.data['codeProduct'].toString());
     productNameController =
         TextEditingController(text: widget.data['nameProduct'].toString());
+    codeStoreController =
+        TextEditingController(text: widget.data['nameStore'].toString());
+    unitController =
+        TextEditingController(text: widget.data['count_unit'].toString());
+    priceController =
+        TextEditingController(text: widget.data['price'].toString());
   }
 
   @override
@@ -54,6 +63,9 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                 ),
                 buildReadOnlyField('รหัสสินค้า', productIdController),
                 buildReadOnlyField('ชื่อสินค้า', productNameController),
+                buildReadOnlyField('ชื่อร้านค้า', codeStoreController),
+                buildReadOnlyField('หน่วยนับ', unitController),
+                buildReadOnlyField('ราคา', priceController),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {

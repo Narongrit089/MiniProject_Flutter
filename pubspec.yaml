@@ -89,6 +89,7 @@ flutter:
     - images/3d-house.png
     - images/3d-map.png
     - images/logout.png
+    - images/list.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

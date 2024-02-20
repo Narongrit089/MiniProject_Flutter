@@ -1,9 +1,30 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class StoreDetailPage extends StatelessWidget {
+import 'package:mn_641463014/Content/StoreData/sList.dart';
+
+class StoreDetailPage extends StatefulWidget {
   final Map<String, dynamic> data;
 
   StoreDetailPage({required this.data});
+
+  @override
+  _StoreDetailPageState createState() => _StoreDetailPageState();
+}
+
+class _StoreDetailPageState extends State<StoreDetailPage> {
+  late TextEditingController storeCodeController;
+  late TextEditingController storeNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    storeCodeController =
+        TextEditingController(text: widget.data['codeStore'].toString());
+    storeNameController =
+        TextEditingController(text: widget.data['nameStore'].toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +36,8 @@ class StoreDetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Card(
           elevation: 5.0,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -34,8 +52,25 @@ class StoreDetailPage extends StatelessWidget {
                     color: Colors.purple,
                   ),
                 ),
-                buildDetailField('รหัสร้านค้า', data['codeStore']),
-                buildDetailField('ชื่อร้านค้า', data['nameStore']),
+                buildReadOnlyField('รหัสร้านค้า', storeCodeController),
+                buildReadOnlyField('ชื่อร้านค้า', storeNameController),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StoreListPage()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('images/list.png', width: 20, height: 20),
+                      SizedBox(width: 8),
+                      Text('กลับไปยังหน้ารายการร้านค้า'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -44,13 +79,21 @@ class StoreDetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailField(String labelText, dynamic value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        '$labelText: $value',
-        style: TextStyle(fontSize: 16.0),
+  Widget buildReadOnlyField(
+      String labelText, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        labelText: labelText,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    storeCodeController.dispose();
+    storeNameController.dispose();
+    super.dispose();
   }
 }

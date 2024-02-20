@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 14, 2024 at 10:08 AM
+-- Generation Time: Feb 20, 2024 at 07:29 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -38,9 +38,9 @@ CREATE TABLE `bus_route` (
 --
 
 INSERT INTO `bus_route` (`route_no`, `codeLo`, `route_time`) VALUES
-('0001', '1011', '08:00:00'),
-('0001', '1103', '09:00:00'),
-('0002', '1102', '08:30:00');
+('1', '1011', '08:00:00'),
+('2', '1102', '08:30:00'),
+('3', '1103', '15:27:00');
 
 -- --------------------------------------------------------
 
@@ -60,9 +60,10 @@ CREATE TABLE `locations` (
 --
 
 INSERT INTO `locations` (`codeLo`, `nameLo`, `latitude`, `longitude`) VALUES
-('1011', 'GreenMarket', 19.9855695, 99.8435655),
-('1102', 'GreenMarket', 19.9738654, 99.8621986),
-('1103', 'GreenMarket', 20.0469511, 99.8748551);
+('1011', 'คณะเทคโนโลยีดิจิทัล', 19.9855695, 99.8435655),
+('1102', 'สวนสมเด็จย่า', 19.9777653, 99.8468126),
+('1103', 'ตลาดสดบ้านดู่', 19.9671219, 99.8556967),
+('1104', 'เจ้าหมูชาบู', 19.9716967, 99.8601342);
 
 -- --------------------------------------------------------
 
@@ -74,7 +75,7 @@ CREATE TABLE `products` (
   `codeProduct` varchar(4) NOT NULL,
   `codeStore` varchar(3) NOT NULL,
   `nameProduct` varchar(100) NOT NULL,
-  `count_unit` int(11) NOT NULL,
+  `count_unit` varchar(50) NOT NULL,
   `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -83,9 +84,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`codeProduct`, `codeStore`, `nameProduct`, `count_unit`, `price`) VALUES
-('5001', '001', 'เสื้อผ้า', 50, 500),
-('5002', '002', 'รองเท้า', 30, 800),
-('5003', '003', 'กระเป๋า', 20, 1200);
+('5001', '101', 'เสื้อผ้า', 'ตัว', 500),
+('5002', '102', 'รองเท้า', 'คู่', 800),
+('5003', '103', 'กระเป๋า', 'ใบ', 1200);
 
 -- --------------------------------------------------------
 
@@ -103,9 +104,9 @@ CREATE TABLE `stores` (
 --
 
 INSERT INTO `stores` (`codeStore`, `nameStore`) VALUES
-('001', 'ร้านเสื้อผ้าชาย'),
-('002', 'ร้านรองเท้า'),
-('003', 'ร้านกระเป๋า');
+('101', 'ร้านเสื้อผ้าชาย'),
+('102', 'ร้านรองเท้า'),
+('103', 'ร้านกระเป๋า');
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,7 @@ CREATE TABLE `tram_data` (
 --
 
 INSERT INTO `tram_data` (`tram_code`, `car_num`) VALUES
-('99001', 'TS-12345'),
+('99001', 'TS-12346'),
 ('99002', 'TN-54321'),
 ('99003', 'TK-98765');
 
@@ -149,7 +150,12 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `password`, `phone`) VALUES
 ('00001', 'สมชาย', 'ใจดี', 'somchai@example.com', 'pass123', '0812345678'),
 ('00002', 'สมหญิง', 'ใจเย็น', 'somying@example.com', 'pass456', '0876543210'),
-('00003', 'ประหยัด', 'เงิน', 'prayan@example.com', 'pass789', '0898765432');
+('00003', 'ประหยัด', 'เงิน', 'prayan@example.com', 'pass789', '0898765432'),
+('00004', 'ณรงค์ฤทธิ์', 'สวยสม', 'save', 'save123', '0621653986'),
+('00005', 'สุรศักดิ์', 'พันวนากร', 'surasak@gmail.com', 'lala123', '0632040255'),
+('00006', 'กีรติ', 'สิงห์สุข', 'keera@gmail.com', 'keera123', '0654281395'),
+('00007', 'ณรงค์ฤทธิ์', 'สวยสม', 'save@gmail.com', 'save123', '0621653986'),
+('00008', 'test', 'test', 'test@gmaiil.com', 'test123', '0688888888');
 
 --
 -- Indexes for dumped tables
